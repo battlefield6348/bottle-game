@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#1b1f3b" />
+    <title>Color Mart 倒水排序</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='20' y='6' width='24' height='52' rx='12' fill='%23ffffff' opacity='.3'/%3E%3Crect x='20' y='34' width='24' height='24' rx='12' fill='%23ff5fb1'/%3E%3Crect x='20' y='22' width='24' height='14' fill='%234cb8ff'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="board" aria-label="遊戲盤面"></canvas>
+
+    <header class="hud">
+      <div class="hud-title">
+        <span class="level" id="level-label">第 1 關</span>
+        <span class="chips" id="mechanic-chips"></span>
+      </div>
+      <div class="hud-actions">
+        <button class="icon-button" id="restart-button" aria-label="重玩本關" title="重玩本關">
+          <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4.5h4.5" /></svg>
+        </button>
+        <button class="icon-button" id="undo-button" aria-label="復原一步" title="復原一步 (Ctrl+Z)">
+          <svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-4" /></svg>
+        </button>
+        <button class="icon-button" id="hint-button" aria-label="提示" title="提示">
+          <svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z" /></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <div class="overlay" id="loading" hidden>
+      <div class="spinner"></div>
+    </div>
+
+    <div class="overlay" id="mechanic-dialog" hidden>
+      <div class="card">
+        <p class="eyebrow">新機制</p>
+        <h2 id="mechanic-title"></h2>
+        <p id="mechanic-text"></p>
+        <button class="primary" id="mechanic-ok">知道了</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="win-dialog" hidden>
+      <div class="card">
+        <p class="eyebrow">太棒了</p>
+        <h2 id="win-title">過關！</h2>
+        <p id="win-text"></p>
+        <button class="primary" id="next-button">下一關</button>
+      </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
