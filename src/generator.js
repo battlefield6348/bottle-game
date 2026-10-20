@@ -42,7 +42,8 @@ function stepsSince(level, unlockLevel, every) {
 
 export function levelConfig(level) {
   const colors = Math.min(3 + Math.floor((level - 1) / 2), MAX_COLORS);
-  const hiddenBottles = Math.min(stepsSince(level, MECHANIC_UNLOCK_LEVEL.hidden, 3), colors);
+  const maxHidden = Math.ceil(colors * 0.75);
+  const hiddenBottles = Math.min(stepsSince(level, MECHANIC_UNLOCK_LEVEL.hidden, 3), maxHidden);
   return {
     colors,
     emptyBottles: 2,

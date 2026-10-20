@@ -66,3 +66,10 @@ test('高關卡盤面確實包含特殊瓶', () => {
   assert.ok(bottles.some((bottle) => bottle.bound !== null));
   assert.ok(bottles.some((bottle) => bottle.chain !== null || bottle.ice > 0));
 });
+
+test('遮擋瓶最多佔顏色瓶的四分之三，保留可推理的資訊', () => {
+  for (let level = 1; level <= 80; level++) {
+    const config = levelConfig(level);
+    assert.ok(config.hiddenBottles <= Math.ceil(config.colors * 0.75), `level ${level}`);
+  }
+});
