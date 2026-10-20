@@ -9,6 +9,47 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="halloween-decor" aria-hidden="true">
+      <svg width="0" height="0" class="defs">
+        <symbol id="bat" viewBox="0 0 64 26">
+          <path d="M0 6Q8-2 16 4Q20-4 26 2L29 0 30 4Q32 3 34 4L35 0 38 2Q44-4 48 4Q56-2 64 6Q56 6 52 12Q48 8 42 12Q38 8 34 14L32 18 30 14Q26 8 22 12Q16 8 12 12Q8 6 0 6Z" />
+        </symbol>
+        <symbol id="pumpkin" viewBox="0 0 100 90">
+          <path d="M47 16C46 8 50 3 57 2l1 5c-4 1-5 4-4 10Z" fill="#4b6b2a" />
+          <ellipse cx="30" cy="54" rx="26" ry="32" fill="#e3600d" />
+          <ellipse cx="70" cy="54" rx="26" ry="32" fill="#e3600d" />
+          <ellipse cx="50" cy="54" rx="24" ry="35" fill="#ff7f1e" />
+          <g class="pumpkin-face" fill="#ffd84a">
+            <path d="M28 46h12l-6-11Z" />
+            <path d="M60 46h12l-6-11Z" />
+            <path d="M46 56h8l-4-6Z" />
+            <path d="M26 62l7 4 4-4 6 6 7-5 7 5 6-6 4 4 7-4Q50 90 26 62Z" />
+          </g>
+        </symbol>
+      </svg>
+      <div class="stars"></div>
+      <div class="moon"></div>
+      <svg class="bat bat-1"><use href="#bat" /></svg>
+      <svg class="bat bat-2"><use href="#bat" /></svg>
+      <svg class="bat bat-3"><use href="#bat" /></svg>
+      <div class="spider">
+        <svg viewBox="0 0 40 36">
+          <g stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round">
+            <path d="M14 14 6 8 2 14M14 18 4 18 1 24M15 21 7 27 5 34M26 14l8-6 4 6M26 18h10l3 6M25 21l8 6 2 7" />
+          </g>
+          <ellipse cx="20" cy="18" rx="8" ry="9" fill="currentColor" />
+          <circle cx="17" cy="15" r="1.6" fill="#ff5a3c" />
+          <circle cx="23" cy="15" r="1.6" fill="#ff5a3c" />
+        </svg>
+      </div>
+      <svg class="graveyard" viewBox="0 0 1200 140" preserveAspectRatio="none">
+        <path d="M0 140V92Q150 58 320 84T640 78T960 70T1200 86V140Z" fill="#120c22" />
+        <path d="M0 140V112Q200 92 420 110T820 104T1200 108V140Z" fill="#0a0716" />
+      </svg>
+      <svg class="pumpkin pumpkin-left"><use href="#pumpkin" /></svg>
+      <svg class="pumpkin pumpkin-right"><use href="#pumpkin" /></svg>
+    </div>
+
     <canvas id="board" aria-label="遊戲盤面"></canvas>
 
     <header class="hud">

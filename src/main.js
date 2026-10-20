@@ -1,4 +1,5 @@
 import { Game } from './game.js';
+import { isHalloween } from './season.js';
 
 const SAVE_KEY = 'color-mart-water-sort';
 const MECHANICS = {
@@ -45,6 +46,13 @@ function persist() {
   } catch {
     // 無法儲存時仍可正常遊玩
   }
+}
+
+if (isHalloween(new Date(), window.location.search)) {
+  document.body.classList.add('halloween');
+  document.querySelector('meta[name="theme-color"]').content = '#0c0918';
+  document.querySelector('#win-dialog .eyebrow').textContent = '🎃 不給糖就搗蛋';
+  elements.next.textContent = '繼續搗蛋 👻';
 }
 
 const save = loadSave();
