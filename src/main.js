@@ -4,6 +4,8 @@ import { pour } from './rules.js';
 import { COLORS } from './palette.js';
 
 const SAVE_KEY = 'color-mart-water-sort';
+// 產生器以 >>> 0 處理 seed，因此有效範圍為 32 位元無號整數。
+const MAX_SEED = 2 ** 32 - 1;
 const MECHANICS = {
   hidden: { title: '遮擋瓶', chip: '遮擋', text: '底層顏色以「?」隱藏，倒掉上層後才會揭露。' },
   bound: { title: '綁定色瓶', chip: '綁定', text: '瓶身與底座標示的顏色，就是這個瓶子唯一能接受的顏色。' },
@@ -35,6 +37,14 @@ const elements = {
   winDialog: document.getElementById('win-dialog'),
   winText: document.getElementById('win-text'),
   next: document.getElementById('next-button'),
+  settings: document.getElementById('settings-button'),
+  settingsDialog: document.getElementById('settings-dialog'),
+  settingsForm: document.getElementById('settings-form'),
+  settingsError: document.getElementById('settings-error'),
+  seedInput: document.getElementById('seed-input'),
+  seedRandom: document.getElementById('seed-random'),
+  levelInput: document.getElementById('level-input'),
+  settingsCancel: document.getElementById('settings-cancel'),
 };
 
 // 瀏覽器儲存可能被停用（無痕模式等），讀寫失敗時退回預設值即可。
@@ -146,10 +156,14 @@ function introduceNewMechanic(present) {
   elements.mechanicDialog.hidden = false;
 }
 
+// 連續切換關卡時，只採用最後一次請求的結果，避免較慢的舊請求蓋掉新關卡。
+let levelToken = 0;
 async function startLevel(level) {
   stopAutoplay();
+  const token = ++levelToken;
   elements.loading.hidden = false;
   const levelData = await fetchLevel(level);
+  if (token !== levelToken) return;
   elements.loading.hidden = true;
   elements.levelLabel.textContent = `第 ${level} 關`;
 
@@ -333,6 +347,50 @@ elements.autoplayStop.addEventListener('click', stopAutoplay);
 elements.autoplayToggle.addEventListener('click', () => {
   const collapsed = elements.autoplay.classList.toggle('collapsed');
   elements.autoplayToggle.setAttribute('aria-expanded', String(!collapsed));
+});
+
+function parseWholeNumber(text, min, max) {
+  if (!/^\d+$/.test(text.trim())) return null;
+  const value = Number(text);
+  return value >= min && value <= max ? value : null;
+}
+
+elements.settings.addEventListener('click', () => {
+  if (autoplay.active) stopAutoplay();
+  elements.seedInput.value = String(save.seed);
+  elements.levelInput.value = String(save.level);
+  elements.settingsError.textContent = '';
+  elements.settingsDialog.hidden = false;
+});
+
+elements.seedRandom.addEventListener('click', () => {
+  elements.seedInput.value = String(Math.floor(Math.random() * 2 ** 31));
+});
+
+elements.settingsCancel.addEventListener('click', () => {
+  elements.settingsDialog.hidden = true;
+});
+
+elements.settingsForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const seed = parseWholeNumber(elements.seedInput.value, 0, MAX_SEED);
+  const level = parseWholeNumber(elements.levelInput.value, 1, Number.MAX_SAFE_INTEGER);
+  if (seed === null) {
+    elements.settingsError.textContent = `Seed 請輸入 0 到 ${MAX_SEED} 的整數`;
+    return;
+  }
+  if (level === null) {
+    elements.settingsError.textContent = '關卡請輸入 1 以上的整數';
+    return;
+  }
+  // 關卡由 seed 決定，換 seed 後先前預先產生的關卡都要作廢。
+  if (seed !== save.seed) levelCache.clear();
+  save.seed = seed;
+  save.level = level;
+  persist();
+  elements.settingsDialog.hidden = true;
+  elements.winDialog.hidden = true;
+  startLevel(level);
 });
 
 elements.mechanicOk.addEventListener('click', () => {

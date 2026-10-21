@@ -60,6 +60,7 @@ body {
 }
 
 .level {
+  white-space: nowrap;
   font-size: 22px;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -119,6 +120,18 @@ body {
   stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+/* 手機上 HUD 有五顆按鈕，稍微縮小才不會擠壓關卡標題 */
+@media (max-width: 420px) {
+  .hud-actions {
+    gap: 6px;
+  }
+
+  .hud-actions .icon-button {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .toast {
@@ -330,6 +343,76 @@ body {
 
 .primary:active {
   transform: scale(0.95);
+}
+
+.settings {
+  text-align: left;
+}
+
+.settings h2,
+.settings .eyebrow {
+  text-align: center;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.field-row {
+  display: flex;
+  gap: 8px;
+}
+
+.field-row input {
+  flex: 1;
+}
+
+.field input {
+  min-width: 0;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+
+.field input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.field-error {
+  min-height: 1.4em;
+  margin: 0 0 8px !important;
+  color: #ff8a7a !important;
+  font-size: 13px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.secondary {
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  background: var(--button);
+  color: var(--text);
+  cursor: pointer;
 }
 
 .spinner {
