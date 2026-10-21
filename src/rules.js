@@ -10,8 +10,9 @@ export function topColor(bottle) {
   return bottle.layers[bottle.layers.length - 1];
 }
 
+// 還有未揭露的「?」時不算完成：玩家必須先倒出上層讓它們揭露，才能確認是同色。
 export function isComplete(bottle) {
-  if (bottle.layers.length !== CAPACITY) return false;
+  if (bottle.layers.length !== CAPACITY || bottle.hidden > 0) return false;
   return bottle.layers.every((color) => color === bottle.layers[0]);
 }
 

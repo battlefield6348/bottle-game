@@ -59,6 +59,22 @@ test('全滿同色瓶視為完成並封蓋，不能再倒出', () => {
   assert.deepEqual(completedColors(bottles), new Set([1]));
 });
 
+test('仍有遮擋層的同色滿瓶不算完成，必須先倒出揭露', () => {
+  // 底下兩層是被遮住的紅色，倒入紅色湊滿後仍不算完成
+  let bottles = [makeBottle([1, 1, 1], { hidden: 2 }), makeBottle([1]), makeBottle([])];
+  bottles = pour(bottles, 1, 0).bottles;
+  assert.deepEqual(bottles[0].layers, [1, 1, 1, 1]);
+  assert.equal(isComplete(bottles[0]), false);
+  assert.equal(completedColors(bottles).size, 0);
+  assert.equal(isWon(bottles), false);
+
+  // 可以倒出可見的部分，遮擋層不會一起倒出
+  assert.equal(canPour(bottles, 0, 2), true);
+  const result = pour(bottles, 0, 2);
+  assert.equal(result.amount, 2);
+  assert.equal(result.bottles[0].hidden, 1);
+});
+
 test('綁定色瓶只接受指定顏色', () => {
   const bottles = [makeBottle([1]), makeBottle([2]), makeBottle([], { bound: 2 })];
   assert.equal(canPour(bottles, 0, 2), false);

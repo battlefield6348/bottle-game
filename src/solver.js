@@ -86,6 +86,7 @@ export function solve(bottles, { nodeLimit = 200000 } = {}) {
 
 // 最短步數的下界：每種顏色要合併成「需要的瓶數」段，且至少要有那麼多段位在瓶底；
 // 每一步只能讓其中一項減一，因此不會高估，A* 找到的解保證最短。
+// 遮擋層各自算一段：它們揭露時不會和下方合併，必須之後再靠倒水合併。
 function remainingMovesLowerBound(bottles) {
   const units = new Map();
   const runs = new Map();
@@ -93,7 +94,7 @@ function remainingMovesLowerBound(bottles) {
   for (const bottle of bottles) {
     bottle.layers.forEach((color, index) => {
       units.set(color, (units.get(color) ?? 0) + 1);
-      if (index > 0 && bottle.layers[index - 1] === color) return;
+      if (index > 0 && index > bottle.hidden && bottle.layers[index - 1] === color) return;
       runs.set(color, (runs.get(color) ?? 0) + 1);
       if (index === 0) bottoms.set(color, (bottoms.get(color) ?? 0) + 1);
     });

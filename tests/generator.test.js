@@ -29,7 +29,9 @@ test('每個顏色剛好出現 CAPACITY 次，且開局沒有已完成的瓶子'
   const { bottles } = generateLevel(15, 99);
   const counts = new Map();
   for (const bottle of bottles) {
-    assert.equal(isComplete(bottle), false);
+    // 不論底層是否被遮擋，開局都不該有整瓶同色的瓶子
+    const uniformFull = bottle.layers.length === CAPACITY && bottle.layers.every((c) => c === bottle.layers[0]);
+    assert.equal(uniformFull, false);
     for (const color of bottle.layers) counts.set(color, (counts.get(color) ?? 0) + 1);
   }
   for (const count of counts.values()) assert.equal(count, CAPACITY);

@@ -1,4 +1,4 @@
-import { CAPACITY, makeBottle, isComplete } from './rules.js';
+import { CAPACITY, makeBottle } from './rules.js';
 import { solve } from './solver.js';
 
 export const MAX_COLORS = 12;
@@ -66,6 +66,10 @@ function relax(config) {
   return { ...config, emptyBottles: config.emptyBottles + 1 };
 }
 
+function isUniformFull(bottle) {
+  return bottle.layers.length === CAPACITY && bottle.layers.every((color) => color === bottle.layers[0]);
+}
+
 function buildCandidate(config, random) {
   const units = [];
   for (let color = 0; color < config.colors; color++) {
@@ -116,7 +120,8 @@ export function generateLevel(level, seed) {
 
     for (let attempt = 0; attempt < ATTEMPTS_PER_STAGE && found < config.candidates; attempt++) {
       const bottles = buildCandidate(config, random);
-      if (bottles.some(isComplete)) continue;
+      // 開局不放已經整瓶同色的瓶子，即使底層被遮擋也一樣（否則只是白白要玩家倒出再倒回）。
+      if (bottles.some(isUniformFull)) continue;
 
       const result = solve(bottles, { nodeLimit: SOLVER_NODE_LIMIT });
       if (!result.moves) continue;
