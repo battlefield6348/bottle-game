@@ -58,8 +58,8 @@
         <span class="chips" id="mechanic-chips"></span>
       </div>
       <div class="hud-actions">
-        <button class="icon-button" id="settings-button" aria-label="關卡設定" title="關卡設定（seed／跳關）">
-          <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" /><circle cx="16" cy="7" r="2" /><circle cx="8" cy="17" r="2" /></svg>
+        <button class="icon-button" id="home-button" aria-label="回到首頁" title="回到首頁">
+          <svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7M6 9.5V20h4.5v-5h3v5H18V9.5" /></svg>
         </button>
         <button class="icon-button" id="restart-button" aria-label="重玩本關" title="重玩本關">
           <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4.5h4.5" /></svg>
@@ -107,37 +107,40 @@
       </div>
     </div>
 
-    <div class="overlay" id="settings-dialog" hidden>
-      <form class="card settings" id="settings-form" novalidate>
-        <p class="eyebrow">關卡設定</p>
-        <h2>前往關卡</h2>
-        <label class="field">
-          <span>Seed（相同 seed 的玩家會玩到相同的關卡）</span>
-          <span class="field-row">
-            <input id="seed-input" type="number" inputmode="numeric" min="0" max="4294967295" step="1" required />
-            <button type="button" class="icon-button" id="seed-random" aria-label="隨機 seed" title="隨機 seed">
-              <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3" /><path d="M9 9h.01M15 15h.01M15 9h.01M9 15h.01M12 12h.01" /></svg>
-            </button>
-          </span>
-        </label>
-        <label class="field">
-          <span>關卡</span>
-          <input id="level-input" type="number" inputmode="numeric" min="1" step="1" required />
-        </label>
-        <p class="field-error" id="settings-error" role="alert"></p>
-        <div class="dialog-actions">
-          <button type="button" class="secondary" id="settings-cancel">取消</button>
-          <button type="submit" class="primary">前往</button>
-        </div>
-      </form>
-    </div>
-
     <div class="overlay" id="win-dialog" hidden>
       <div class="card">
         <p class="eyebrow">太棒了</p>
         <h2 id="win-title">過關！</h2>
         <p id="win-text"></p>
         <button class="primary" id="next-button">下一關</button>
+      </div>
+    </div>
+
+    <div class="overlay home" id="home">
+      <div class="card home-card">
+        <p class="eyebrow">Color Mart</p>
+        <h1 class="home-title">倒水排序</h1>
+        <p class="home-progress" id="home-progress"></p>
+        <button class="primary home-continue" id="home-continue"></button>
+
+        <form class="home-form" id="home-form" novalidate>
+          <p class="home-section">自訂關卡</p>
+          <label class="field">
+            <span>Seed（相同 seed 的玩家會玩到相同的關卡）</span>
+            <span class="field-row">
+              <input id="seed-input" type="number" inputmode="numeric" min="0" max="4294967295" step="1" required />
+              <button type="button" class="icon-button" id="seed-random" aria-label="隨機 seed" title="隨機 seed">
+                <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3" /><path d="M9 9h.01M15 15h.01M15 9h.01M9 15h.01M12 12h.01" /></svg>
+              </button>
+            </span>
+          </label>
+          <label class="field">
+            <span>關卡</span>
+            <input id="level-input" type="number" inputmode="numeric" min="1" step="1" required />
+          </label>
+          <p class="field-error" id="home-error" role="alert"></p>
+          <button type="submit" class="secondary home-go">前往這一關</button>
+        </form>
       </div>
     </div>
 

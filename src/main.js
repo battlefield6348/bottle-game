@@ -37,14 +37,15 @@ const elements = {
   winDialog: document.getElementById('win-dialog'),
   winText: document.getElementById('win-text'),
   next: document.getElementById('next-button'),
-  settings: document.getElementById('settings-button'),
-  settingsDialog: document.getElementById('settings-dialog'),
-  settingsForm: document.getElementById('settings-form'),
-  settingsError: document.getElementById('settings-error'),
+  homeButton: document.getElementById('home-button'),
+  home: document.getElementById('home'),
+  homeProgress: document.getElementById('home-progress'),
+  homeContinue: document.getElementById('home-continue'),
+  homeForm: document.getElementById('home-form'),
+  homeError: document.getElementById('home-error'),
   seedInput: document.getElementById('seed-input'),
   seedRandom: document.getElementById('seed-random'),
   levelInput: document.getElementById('level-input'),
-  settingsCancel: document.getElementById('settings-cancel'),
 };
 
 // 瀏覽器儲存可能被停用（無痕模式等），讀寫失敗時退回預設值即可。
@@ -340,6 +341,7 @@ elements.solve.addEventListener('click', async () => {
   }
   game.deselect(performance.now());
   startAutoplay(describeSteps(bottles, result.moves));
+  if (!result.shortest) showToast('盤面較複雜，這份解法不保證是最短步數');
 });
 
 elements.autoplayPause.addEventListener('click', () => setPaused(!autoplay.paused));
@@ -355,32 +357,36 @@ function parseWholeNumber(text, min, max) {
   return value >= min && value <= max ? value : null;
 }
 
-elements.settings.addEventListener('click', () => {
-  if (autoplay.active) stopAutoplay();
+// 首頁蓋在盤面上方，「繼續」只需關掉首頁，目前關卡的進度會保留。
+function openHome() {
+  stopAutoplay();
+  elements.homeProgress.textContent = `目前進度：第 ${save.level} 關 · Seed ${save.seed}`;
+  elements.homeContinue.textContent = `繼續第 ${save.level} 關`;
   elements.seedInput.value = String(save.seed);
   elements.levelInput.value = String(save.level);
-  elements.settingsError.textContent = '';
-  elements.settingsDialog.hidden = false;
+  elements.homeError.textContent = '';
+  elements.home.hidden = false;
+}
+
+elements.homeButton.addEventListener('click', openHome);
+elements.homeContinue.addEventListener('click', () => {
+  elements.home.hidden = true;
 });
 
 elements.seedRandom.addEventListener('click', () => {
   elements.seedInput.value = String(Math.floor(Math.random() * 2 ** 31));
 });
 
-elements.settingsCancel.addEventListener('click', () => {
-  elements.settingsDialog.hidden = true;
-});
-
-elements.settingsForm.addEventListener('submit', (event) => {
+elements.homeForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const seed = parseWholeNumber(elements.seedInput.value, 0, MAX_SEED);
   const level = parseWholeNumber(elements.levelInput.value, 1, Number.MAX_SAFE_INTEGER);
   if (seed === null) {
-    elements.settingsError.textContent = `Seed 請輸入 0 到 ${MAX_SEED} 的整數`;
+    elements.homeError.textContent = `Seed 請輸入 0 到 ${MAX_SEED} 的整數`;
     return;
   }
   if (level === null) {
-    elements.settingsError.textContent = '關卡請輸入 1 以上的整數';
+    elements.homeError.textContent = '關卡請輸入 1 以上的整數';
     return;
   }
   // 關卡由 seed 決定，換 seed 後先前預先產生的關卡都要作廢。
@@ -388,7 +394,7 @@ elements.settingsForm.addEventListener('submit', (event) => {
   save.seed = seed;
   save.level = level;
   persist();
-  elements.settingsDialog.hidden = true;
+  elements.home.hidden = true;
   elements.winDialog.hidden = true;
   startLevel(level);
 });
@@ -419,3 +425,4 @@ function loop(now) {
 }
 requestAnimationFrame(loop);
 startLevel(save.level);
+openHome();
