@@ -67,8 +67,27 @@
         <button class="icon-button" id="hint-button" aria-label="提示" title="提示">
           <svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z" /></svg>
         </button>
+        <button class="icon-button" id="solve-button" aria-label="一鍵通關" title="一鍵通關（自動展示完整步驟）">
+          <svg viewBox="0 0 24 24"><path d="M4 5v14l8-7ZM12 5v14l8-7Z" /></svg>
+        </button>
       </div>
     </header>
+
+    <aside class="autoplay" id="autoplay" hidden>
+      <div class="autoplay-bar">
+        <button class="autoplay-summary" id="autoplay-toggle" aria-expanded="true" aria-controls="steps-list">
+          <span class="autoplay-count" id="autoplay-count"></span>
+          <span class="autoplay-current" id="autoplay-current"></span>
+        </button>
+        <button class="icon-button" id="autoplay-pause" aria-label="暫停" title="暫停">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" /></svg>
+        </button>
+        <button class="icon-button" id="autoplay-stop" aria-label="停止自動通關" title="停止自動通關">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+      <ol class="steps" id="steps-list"></ol>
+    </aside>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 

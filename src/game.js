@@ -54,6 +54,8 @@ export class Game {
     this.metrics = null;
     this.zCounter = 0;
     this.won = false;
+    // 自動通關時在瓶下顯示編號；active 為目前步驟的來源與目標瓶。
+    this.labels = null;
   }
 
   load(levelData, now) {
@@ -222,6 +224,15 @@ export class Game {
     }
     target.shakeStart = now;
     if (target.lockedShown) this.explainLock(index);
+  }
+
+  // 自動通關用：直接執行一步倒水，盤面狀態不允許時回傳 false。
+  autoPour(from, to, now) {
+    if (this.won || this.views[from].busy || this.views[to].busy) return false;
+    if (!canPour(this.bottles, from, to)) return false;
+    this.deselect(now);
+    this.startPour(from, to, now);
+    return true;
   }
 
   deselect(now) {
@@ -496,6 +507,7 @@ export class Game {
       streams: this.pours.map((job) => job.stream).filter(Boolean),
       particles: this.particles.filter((particle) => now >= particle.born),
       completedCount: completedColors(this.bottles).size,
+      labels: this.labels,
       now,
       dpr: this.dpr,
       width: this.width,

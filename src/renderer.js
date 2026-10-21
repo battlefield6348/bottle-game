@@ -410,6 +410,25 @@ function drawParticles(ctx, particles, now) {
   ctx.globalAlpha = 1;
 }
 
+function drawLabels(ctx, views, metrics, labels) {
+  const { width, height } = metrics;
+  const radius = width * 0.24;
+  ctx.font = `800 ${width * 0.28}px system-ui, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (const view of views) {
+    const x = view.slot.x;
+    const y = view.slot.y + height + height * 0.025 + radius * 1.5;
+    const active = labels.active?.includes(view.index);
+    ctx.fillStyle = active ? '#ffcf4a' : 'rgba(255,255,255,0.14)';
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = active ? '#3a2a00' : 'rgba(255,255,255,0.85)';
+    ctx.fillText(String(view.index + 1), x, y + 1);
+  }
+}
+
 export function drawScene(ctx, scene) {
   const { metrics, views, streams, particles, dpr, width, height } = scene;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -417,6 +436,7 @@ export function drawScene(ctx, scene) {
   if (!metrics) return;
 
   for (const view of views) drawShadow(ctx, view, metrics);
+  if (scene.labels) drawLabels(ctx, views, metrics, scene.labels);
   const resting = views.filter((view) => !view.pouring);
   const pouring = views.filter((view) => view.pouring).sort((a, b) => a.z - b.z);
   for (const view of resting) drawBottle(ctx, view, metrics, scene);

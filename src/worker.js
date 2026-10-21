@@ -16,5 +16,15 @@ self.onmessage = ({ data }) => {
       move: result.moves ? result.moves[0] ?? null : null,
       provenUnsolvable: result.exhausted,
     });
+    return;
+  }
+  if (data.type === 'solve') {
+    const result = solve(data.bottles, { nodeLimit: 400000 });
+    self.postMessage({
+      type: 'solution',
+      requestId: data.requestId,
+      moves: result.moves,
+      provenUnsolvable: result.exhausted,
+    });
   }
 };
